@@ -10,6 +10,9 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
   const [language, setLanguage] = React.useState<SupportedLanguages>("javascript");
   const [code, setCode] = React.useState("");
   const [output, setOutput] = React.useState("");
+  const [loader, setLoader] = React.useState(false);
+  const [isReactProject, setIsReactProject] = React.useState(true);
+  const [isDarkTheme, setIsDarkTheme] = React.useState(true);
 
   return (
     <EditorContext.Provider
@@ -22,6 +25,12 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
         setCode,
         output,
         setOutput,
+        loader,
+        setLoader,
+        isReactProject,
+        setIsReactProject,
+        isDarkTheme, 
+        setIsDarkTheme
       }}
     >
       {children}

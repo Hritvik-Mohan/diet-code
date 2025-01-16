@@ -1,6 +1,7 @@
 import CodeEditor from "@/components/Editor/CodeEditor";
 import EditorToolBar from "@/components/Editor/EditorToolBar";
 import Output from "@/components/Editor/Output";
+import ReactOutputWindow from "@/components/Editor/ReactOutputWindow";
 import Sidebar from "@/components/Editor/Sidebar";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
@@ -20,10 +21,17 @@ export default function Editor() {
         >
           <CodeEditor />
         </Panel>
-        <PanelResizeHandle />
-        <Panel defaultSize={30} minSize={5}>
-          <Output />
-        </Panel>
+          <Panel defaultSize={50} minSize={20}>
+            <PanelGroup direction="vertical" className="">
+              <Panel>
+                <ReactOutputWindow />
+              </Panel>
+              <PanelResizeHandle />
+              <Panel>
+                <Output />
+              </Panel>
+            </PanelGroup>
+          </Panel>
       </PanelGroup>
     </div>
   );

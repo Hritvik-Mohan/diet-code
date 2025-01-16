@@ -13,6 +13,12 @@ export interface EditorContextProps {
     setCode: (code: string) => void;
     output: string;
     setOutput: (output: string) => void;
+    loader: boolean;
+    setLoader: (loader: boolean) => void;
+    isReactProject: boolean;
+    setIsReactProject: (isReactProject: boolean) => void;
+    isDarkTheme: boolean;
+    setIsDarkTheme: (isDarkTheme: boolean) => void;
 }
 
 export type UseEditorContextReturnType = EditorContextProps;

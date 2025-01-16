@@ -11,6 +11,8 @@
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
+    "@radix-ui/react-menubar": "^1.1.4",
+    "@radix-ui/react-progress": "^1.1.1",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "axios": "^1.7.9",
@@ -20,6 +22,7 @@
     "next": "15.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
     "react-resizable-panels": "^2.1.7",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7"

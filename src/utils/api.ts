@@ -8,7 +8,6 @@ const api = axios.create({
 type Language = keyof typeof LANGUAGE_VERSIONS;
 
 export const executeCode = async (language: Language, sourceCode: string) => {
-    console.log("::Run button clicked << executeCode");
     try {
         const response = await api.post('/execute', {
             "language": language,
@@ -19,7 +18,6 @@ export const executeCode = async (language: Language, sourceCode: string) => {
               }
             ],
         });
-
         return response.data;
     } catch (error) {
         console.error('Error executing code:', error);

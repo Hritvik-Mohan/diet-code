@@ -7,7 +7,7 @@ import { EditorRef, MonacoEditorOptions, EditorInstance } from "@/index";
 export default function CodeEditor() {
   const editorRef: EditorRef = useRef(null);
   const [value, setValue] = useState('');
-  const { language, setCode } = useEditorContext();
+  const { language, setCode, isDarkTheme } = useEditorContext();
 
   useEffect(() => {
     if (language && files[language]) {
@@ -40,7 +40,7 @@ export default function CodeEditor() {
         height="100%"
         defaultLanguage={language}
         path={`${language}-file`}
-        theme="vs-dark"
+        theme={`${isDarkTheme ? 'vs-dark' : 'light' }`}
         onChange={handleEditorChange}
         value={value}
         onMount={onMount}

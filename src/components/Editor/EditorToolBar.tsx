@@ -1,74 +1,168 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
 import { LANGUAGE_VERSIONS } from "../files/fileData";
 import { useEditorContext } from "@/context/editorContext";
 import { executeCode } from "@/utils/api";
 import { SupportedLanguages, ExecuteCodeResponse } from "@/index";
+import Link from "next/link";
+import { RiJavascriptFill } from "react-icons/ri";
+import { IoLogoReact } from "react-icons/io5";
+import { BiLogoTypescript } from "react-icons/bi";
+import { AiOutlineJava } from "react-icons/ai";
+import { IoLogoPython } from "react-icons/io5";
+import { CiFileOn } from "react-icons/ci";
+
+import { useRouter } from "next/router";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 
 export default function EditorToolBar() {
   const [position, setPosition] = React.useState("bottom");
+  const { language, code, setLanguage, setOutput, setLoader, setIsDarkTheme } =
+    useEditorContext();
+  const [icon, setIcon] = useState<React.ReactElement | null>(null);
 
-  const { language, code, setLanguage, setOutput } = useEditorContext();
+  const router = useRouter();
 
   const runCode = async () => {
     if (!code) return;
+    setLoader(true);
     try {
-      const response = await executeCode(language as SupportedLanguages, code) as ExecuteCodeResponse;
+      const response = (await executeCode(
+        language as SupportedLanguages,
+        code
+      )) as ExecuteCodeResponse;
       setOutput(response.run.output);
+      setLoader(false);
       console.log(response);
     } catch (error) {
-      console.error('Error executing code:', error);
+      setLoader(false);
+      console.error("Error executing code:", error);
     }
   };
 
+  const languageIcon = () => {
+    switch (language) {
+      case "javascript":
+        return <RiJavascriptFill size="2rem" color="yellow" />;
+      case "typescript":
+        return <BiLogoTypescript size="2rem" color="lightblue"/>
+      case "java":
+        return <AiOutlineJava size="2rem" color="white"/>
+      case "python":
+        return <IoLogoPython size="2rem" color="green"/>
+      default:
+        return <CiFileOn size="2rem" color="white"/>;
+    }
+  };
+
+  useEffect(() => {
+    const icon = languageIcon();
+    setIcon(icon);
+  }, [language])
+
   return (
-    <div className="flex items-center justify-evenly p-2 bg-gray-800">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">Switch themes</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-            <DropdownMenuRadioItem value="vs-dark">
-              vs-dark
-            </DropdownMenuRadioItem>
-            <DropdownMenuRadioItem value="light">light</DropdownMenuRadioItem>
-          </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex items-center justify-between gap-6 p-4 bg-gray-800 text-[1rem]">
+      <div className="flex items-center gap-4">
+        <div>
+          {router.pathname == "/react-editor" ? (
+            <IoLogoReact size="2rem" color="pink" />
+          ) : (
+            <>
+              {icon}
+            </>
+          )}
+        </div>
+        <Menubar className="bg-gray-800 text-white border-none">
+          <MenubarMenu>
+            <MenubarTrigger className="font-bold text-[1rem]">
+              File
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarRadioGroup>
+                <Link href="/editor">
+                  <MenubarRadioItem value="vs-dark">
+                    New Code File
+                  </MenubarRadioItem>
+                </Link>
+                <Link href="/react-editor">
+                  <MenubarRadioItem value="light">
+                    React Editor
+                  </MenubarRadioItem>
+                </Link>
+              </MenubarRadioGroup>
+            </MenubarContent>
+          </MenubarMenu>
+          {/* Theme Selector */}
+          <MenubarMenu>
+            <MenubarTrigger className="font-bold text-[1rem]">
+              Switch Themes
+            </MenubarTrigger>
+            <MenubarContent>
+              <MenubarItem disabled>Appearance</MenubarItem>
+              <MenubarSeparator />
+              <MenubarRadioGroup value={position} onValueChange={setPosition}>
+                <MenubarRadioItem
+                  value="vs-dark"
+                  onClick={() => setIsDarkTheme(true)}
+                >
+                  vs-dark
+                </MenubarRadioItem>
+                <MenubarRadioItem
+                  value="light"
+                  onClick={() => setIsDarkTheme(false)}
+                >
+                  light
+                </MenubarRadioItem>
+              </MenubarRadioGroup>
+            </MenubarContent>
+          </MenubarMenu>
+          {/* Language Selector */}
+          {router.pathname !== "/react-editor" && (
+            <MenubarMenu>
+              <MenubarTrigger className="font-bold text-[1rem]">
+                Select Programming Languages
+              </MenubarTrigger>
+              <MenubarContent>
+                <MenubarItem disabled>Languages</MenubarItem>
+                <MenubarSeparator />
+                <MenubarRadioGroup
+                  value={language}
+                  onValueChange={(value) =>
+                    setLanguage(value as SupportedLanguages)
+                  }
+                >
+                  {languages.map(([lang, version], index) => (
+                    <MenubarRadioItem key={`${lang}-${index}`} value={lang}>
+                      {lang}
+                      <p className="ml-2 text-gray-500">{version}</p>
+                    </MenubarRadioItem>
+                  ))}
+                </MenubarRadioGroup>
+              </MenubarContent>
+            </MenubarMenu>
+          )}
+        </Menubar>
+      </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline">Select programming languages</Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Languages</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as SupportedLanguages)}>
-            {languages.map(([lang, version], index) => (
-              <DropdownMenuRadioItem key={`${lang}-${index}`} value={lang}>
-                {lang}
-                <p className="ml-2 text-gray-500">{version}</p>
-              </DropdownMenuRadioItem>
-            ))}
-          </DropdownMenuRadioGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <Button variant="outline" onClick={runCode}>Run</Button>
+      {/* Run Button */}
+      <Button
+        variant="secondary"
+        className="bg-green-700 text-white font-bold w-[6rem] text-[1rem]"
+        onClick={runCode}
+      >
+        Run
+      </Button>
     </div>
   );
 }
