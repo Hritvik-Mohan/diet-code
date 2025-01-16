@@ -11,16 +11,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LANGUAGE_VERSIONS } from "../files/fileData";
 import { useEditorContext } from "@/context/editorContext";
+import { executeCode } from "@/utils/api";
+import { SupportedLanguages, ExecuteCodeResponse } from "@/index";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
-console.log(languages);
 
 export default function EditorToolBar() {
   const [position, setPosition] = React.useState("bottom");
 
-  const { language, setLanguage } = useEditorContext();
+  const { language, code, setLanguage, setOutput } = useEditorContext();
 
-  console.log(language);
+  const runCode = async () => {
+    if (!code) return;
+    try {
+      const response = await executeCode(language as SupportedLanguages, code) as ExecuteCodeResponse;
+      setOutput(response.run.output);
+      console.log(response);
+    } catch (error) {
+      console.error('Error executing code:', error);
+    }
+  };
 
   return (
     <div className="flex items-center justify-evenly p-2 bg-gray-800">
@@ -47,7 +57,7 @@ export default function EditorToolBar() {
         <DropdownMenuContent className="w-56">
           <DropdownMenuLabel>Languages</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
+          <DropdownMenuRadioGroup value={language} onValueChange={(value) => setLanguage(value as SupportedLanguages)}>
             {languages.map(([lang, version], index) => (
               <DropdownMenuRadioItem key={`${lang}-${index}`} value={lang}>
                 {lang}
@@ -58,7 +68,7 @@ export default function EditorToolBar() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button variant="outline">Run</Button>
+      <Button variant="outline" onClick={runCode}>Run</Button>
     </div>
   );
 }
