@@ -13,7 +13,7 @@ export default function CodeEditor() {
     if (language && files[language]) {
       setValue(files[language])
     }
-  }, [language])
+  }, [language]);
 
   const onMount = (editor: EditorInstance) => {
     editorRef.current = editor;
@@ -33,7 +33,6 @@ export default function CodeEditor() {
     setCode(editorRef.current.getValue() || '');
   };
 
-  // console.log(code.current.getValue());
   return (
     <div className="bottom-b-2 h-full">
       <Editor

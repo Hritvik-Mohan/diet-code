@@ -12,7 +12,8 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
   const [output, setOutput] = React.useState("");
   const [loader, setLoader] = React.useState(false);
   const [isReactProject, setIsReactProject] = React.useState(true);
-  const [isDarkTheme, setIsDarkTheme] = React.useState(true);
+  const [isDarkTheme, setIsDarkTheme] = React.useState(true); 
+  const [runReactOutput, setRunReactOutput] = React.useState(false);
 
   return (
     <EditorContext.Provider
@@ -30,7 +31,9 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
         isReactProject,
         setIsReactProject,
         isDarkTheme, 
-        setIsDarkTheme
+        setIsDarkTheme,
+        runReactOutput, 
+        setRunReactOutput
       }}
     >
       {children}

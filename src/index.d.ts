@@ -19,6 +19,8 @@ export interface EditorContextProps {
     setIsReactProject: (isReactProject: boolean) => void;
     isDarkTheme: boolean;
     setIsDarkTheme: (isDarkTheme: boolean) => void;
+    runReactOutput: boolean;
+    setRunReactOutput: (runReactOutput: boolean) => void;
 }
 
 export type UseEditorContextReturnType = EditorContextProps;
