@@ -4,7 +4,7 @@ import { executeReactCode, initializeEsbuild } from "@/utils/reactExecutor";
 import { SupportedLanguages } from "@/index";
 
 export default function ReactOutputWindow() {
-  const { language, code, setOutput, runReactOutput } = useEditorContext();
+  const { language, code, setOutput, runReactOutput, setRunReactOutput } = useEditorContext();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function ReactOutputWindow() {
           }
         }
         setOutput(htmlTemplate);
+        setRunReactOutput(false);
       } catch (error) {
         console.error(error);
         setOutput("Error executing React code: " + (error as Error).message);
@@ -69,16 +70,15 @@ export default function ReactOutputWindow() {
   }
 
   return (
-    <div className="bg-white">
+    <div className="h-full w-full">
       <iframe
         ref={iframeRef}
         title="Code Output"
         sandbox="allow-scripts allow-same-origin"
         style={{
           width: "100%",
-          height: "400px",
+          height: "100%",
           border: "1px solid #ccc",
-          marginTop: "10px",
         }}
       />
     </div>
