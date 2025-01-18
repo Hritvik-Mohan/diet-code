@@ -12,7 +12,7 @@ export default function Editor() {
     <div className="h-screen flex flex-col">
       <EditorToolBar />
       <PanelGroup direction="horizontal" className="flex-1">
-        <Panel defaultSize={15} minSize={5}>
+        <Panel defaultSize={20} minSize={5}>
           <Sidebar />
         </Panel>
         <PanelResizeHandle className="w-[3px] hover:w-[8px] bg-[#414141]" />

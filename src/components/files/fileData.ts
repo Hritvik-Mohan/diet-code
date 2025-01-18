@@ -18,10 +18,10 @@
 
 
 export const files = {
-    javascript: `// Some JavaScript code example\nconsole.log('Hello, world!');`,
-    typescript: `// Some TypeScript code example\ntype User = {\n  name: string;\n  age: number;\n};\n\nconst greet = (user: User): string => {\n  return \`Hello, \${user.name}!\`;\n};\n\nconst user: User = { name: 'Alice', age: 25 };\nconsole.log(greet(user));`,
-    python: `# Some Python code example\ndef greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("Hritvik"))`,
-    java: `// Some Java code example\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
+    javascript: `// Boilerplate JavaScript code example\nconsole.log('Hello, world!');`,
+    typescript: `// Boilerplate TypeScript code example\ntype User = {\n  name: string;\n  age: number;\n};\n\nconst greet = (user: User): string => {\n  return \`Hello, \${user.name}!\`;\n};\n\nconst user: User = { name: 'Alice', age: 25 };\nconsole.log(greet(user));`,
+    python: `# Boilerplate Python code example\ndef greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("Hritvik"))`,
+    java: `// Boilerplate Java code example\npublic class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}`,
     reactjs: `// React.js Boilerplate
 const App = () => {
   return (

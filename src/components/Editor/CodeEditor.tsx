@@ -6,16 +6,16 @@ import { EditorRef, MonacoEditorOptions, EditorInstance } from "@/index";
 
 export default function CodeEditor() {
   const editorRef: EditorRef = useRef(null);
-  const [value, setValue] = useState('');
-  const { language, setCode, isDarkTheme } = useEditorContext();
+  const [value, setValue] = useState("");
+  const { language, code, setCode, isDarkTheme } = useEditorContext();
 
   useEffect(() => {
     if (language && files[language]) {
-      setValue(files[language])
+      setValue(files[language]);
     }
 
     if (editorRef.current) {
-      setCode(editorRef.current.getValue() || '');
+      setCode(editorRef.current.getValue() || "");
     }
   }, [language]);
 
@@ -23,33 +23,33 @@ export default function CodeEditor() {
     editorRef.current = editor;
     editor.focus();
     setCode(editorRef.current.getValue());
-  }
-
-  console.log(value);
+  };
 
   const editorOptions: MonacoEditorOptions = {
     fontSize: 16,
     lineHeight: 24,
     letterSpacing: 0.5,
-  }
+  };
 
   const handleEditorChange = (newValue: string | undefined) => {
-    setValue(newValue || '');
+    setValue(newValue || "");
     setCode(editorRef.current.getValue());
   };
 
   return (
     <div className="bottom-b-2 h-full">
-      <Editor
-        height="100%"
-        defaultLanguage={language === "reactjs" ? "javascript" : language}
-        path={`${language}-file`}
-        theme={`${isDarkTheme ? 'vs-dark' : 'light' }`}
-        onChange={handleEditorChange}
-        value={value}
-        onMount={onMount}
-        options={editorOptions}
-      ></Editor>
+      {value && (
+        <Editor
+          height="100%"
+          defaultLanguage={language === "reactjs" ? "javascript" : language}
+          path={`${language}-file`}
+          theme={`${isDarkTheme ? "vs-dark" : "light"}`}
+          onChange={handleEditorChange}
+          value={code}
+          onMount={onMount}
+          options={editorOptions}
+        ></Editor>
+      )}
     </div>
   );
 }
