@@ -13,11 +13,16 @@ export default function CodeEditor() {
     if (language && files[language]) {
       setValue(files[language])
     }
+
+    if (editorRef.current) {
+      setCode(editorRef.current.getValue() || '');
+    }
   }, [language]);
 
   const onMount = (editor: EditorInstance) => {
     editorRef.current = editor;
     editor.focus();
+    setCode(editorRef.current.getValue());
   }
 
   console.log(value);
@@ -30,14 +35,14 @@ export default function CodeEditor() {
 
   const handleEditorChange = (newValue: string | undefined) => {
     setValue(newValue || '');
-    setCode(editorRef.current.getValue() || '');
+    setCode(editorRef.current.getValue());
   };
 
   return (
     <div className="bottom-b-2 h-full">
       <Editor
         height="100%"
-        defaultLanguage={language}
+        defaultLanguage={language === "reactjs" ? "javascript" : language}
         path={`${language}-file`}
         theme={`${isDarkTheme ? 'vs-dark' : 'light' }`}
         onChange={handleEditorChange}

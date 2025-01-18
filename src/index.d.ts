@@ -1,4 +1,4 @@
-export type SupportedLanguages = 'javascript' | "typescript" | "python" | "java";
+export type SupportedLanguages = 'javascript' | "typescript" | "python" | "java" | "reactjs";
 
 export interface LangaugeVersions {
     [language: string]: string;

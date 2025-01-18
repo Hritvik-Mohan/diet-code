@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/standalone": "^7.26.6",
     "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-menubar": "^1.1.4",
@@ -20,6 +21,7 @@
     "clsx": "^2.1.1",
     "esbuild-wasm": "^0.24.2",
     "lucide-react": "^0.471.1",
+    "monaco-jsx-highlighter": "^2.77.77",
     "next": "15.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

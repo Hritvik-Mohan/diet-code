@@ -1,23 +1,27 @@
-import * as esbuild from 'esbuild-wasm';
+import * as esbuild from "esbuild-wasm";
 
-let isEsbuildInitialized = false;
+let esbuildInitialized: Promise<void> | null = null;
 
 /**
  * Initializes esbuild if it hasn't been initialized already.
  */
 export const initializeEsbuild = async () => {
-    if (!isEsbuildInitialized) {
-        try {
-            await esbuild.initialize({
+    if (!esbuildInitialized) {
+        esbuildInitialized = esbuild
+            .initialize({
                 worker: true,
-                wasmURL: '/esbuild.wasm', // Path to your esbuild WASM file
+                wasmURL: "/esbuild.wasm", // Path to your esbuild WASM file
+            })
+            .then(() => {
+                console.log("Esbuild initialized successfully.");
+            })
+            .catch((error) => {
+                console.error("Failed to initialize esbuild:", error);
+                esbuildInitialized = null; // Reset if initialization fails
             });
-            isEsbuildInitialized = true;
-            console.log("Esbuild initialized successfully.");
-        } catch (error) {
-            console.error("Failed to initialize esbuild:", error);
-        }
     }
+
+    return esbuildInitialized;
 };
 
 /**
@@ -31,15 +35,18 @@ export const executeReactCode = async (code: string): Promise<string> => {
     }
 
     try {
+        // Ensure esbuild is initialized
+        await initializeEsbuild();
+
         const sanitizedCode = code.replace(/import\s+React.*?;/g, ""); // Remove React imports
         const result = await esbuild.transform(sanitizedCode, {
             loader: "jsx", // Transform JSX
             target: "es2015", // Ensure compatibility
         });
+
         return result.code; // Return the transformed code
     } catch (error) {
         console.error("Error transforming React code:", error);
         throw new Error("Failed to transform React code.");
     }
 };
-

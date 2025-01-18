@@ -1,10 +1,13 @@
 import CodeEditor from "@/components/Editor/CodeEditor";
 import EditorToolBar from "@/components/Editor/EditorToolBar";
 import Output from "@/components/Editor/Output";
+import ReactOutputWindow from "@/components/Editor/ReactOutputWindow";
 import Sidebar from "@/components/Editor/Sidebar";
+import { useEditorContext } from "@/context/editorContext";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 export default function Editor() {
+  const { language } = useEditorContext();
   return (
     <div className="h-screen flex flex-col">
       <EditorToolBar />
@@ -21,9 +24,23 @@ export default function Editor() {
           <CodeEditor />
         </Panel>
         <PanelResizeHandle />
-        <Panel defaultSize={30} minSize={5}>
-          <Output />
-        </Panel>
+        {language == "reactjs" ? (
+          <Panel defaultSize={50} minSize={20}>
+            <PanelGroup direction="vertical" className="">
+              <Panel>
+                <ReactOutputWindow />
+              </Panel>
+              <PanelResizeHandle />
+              <Panel>
+                <Output />
+              </Panel>
+            </PanelGroup>
+          </Panel>
+        ) : (
+          <Panel defaultSize={30} minSize={5}>
+            <Output />
+          </Panel>
+        )}
       </PanelGroup>
     </div>
   );

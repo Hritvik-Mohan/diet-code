@@ -21,7 +21,7 @@ import { BiLogoTypescript } from "react-icons/bi";
 import { AiOutlineJava } from "react-icons/ai";
 import { IoLogoPython } from "react-icons/io5";
 import { CiFileOn } from "react-icons/ci";
-
+import { FaReact } from "react-icons/fa";
 import { useRouter } from "next/router";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
@@ -60,6 +60,8 @@ export default function EditorToolBar() {
         return <AiOutlineJava size="2rem" color="white" />;
       case "python":
         return <IoLogoPython size="2rem" color="green" />;
+      case "reactjs":
+        return <FaReact size="2rem" color="pink"/>;
       default:
         return <CiFileOn size="2rem" color="white" />;
     }
@@ -69,65 +71,6 @@ export default function EditorToolBar() {
     const icon = languageIcon();
     setIcon(icon);
   }, [language]);
-
-  // useEffect(() => {
-  //   initializeEsbuild();
-  // }, []);
-
-//   const handleRunCode = async () => {
-//     if (language === ("reactjs" as SupportedLanguages)) {
-//       try {
-//         const transformedCode = await executeReactCode(code);
-//         const htmlTemplate = `
-//   <!DOCTYPE html>
-//   <html lang="en">
-//   <head>
-//     <meta charset="UTF-8">
-//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>React Output</title>
-//     <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-//     <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-//   </head>
-//   <body>
-//     <div id="react-container"></div>
-//     <script>
-//       (function() {
-//         try {
-//           ${transformedCode} // Insert the transformed React code here
-//           if (typeof App === "undefined") {
-//             throw new Error("App component is not defined. Ensure your code includes a valid App component.");
-//           }
-//           ReactDOM.render(React.createElement(App), document.getElementById('react-container'));
-//         } catch (err) {
-//           document.getElementById('react-container').innerHTML = "<pre style='color: red;'>Error: " + err.message + "</pre>";
-//         }
-//       })();
-//     </script>
-//   </body>
-//   </html>
-// `;
-
-//         if (iframeRef.current) {
-//           const iframeDoc =
-//             iframeRef.current.contentDocument ||
-//             iframeRef.current.contentWindow?.document;
-//           if (iframeDoc) {
-//             iframeDoc.open();
-//             iframeDoc.write(htmlTemplate);
-//             iframeDoc.close();
-//           }
-//         }
-//         setOutput(htmlTemplate);
-//         setIframeOutput(iframeRef);
-//         console.log("React code executed.");
-//       } catch (error) {
-//         console.error(error);
-//         setOutput("Error executing React code: " + (error as Error).message);
-//       }
-//     } else {
-//       setOutput("Not a React file");
-//     }
-//   };
 
   return (
     <div className="flex items-center justify-between gap-6 p-4 bg-gray-800 text-[1rem]">
@@ -149,11 +92,6 @@ export default function EditorToolBar() {
                 <Link href="/editor">
                   <MenubarRadioItem value="vs-dark">
                     New Code File
-                  </MenubarRadioItem>
-                </Link>
-                <Link href="/react-editor">
-                  <MenubarRadioItem value="light">
-                    React Editor
                   </MenubarRadioItem>
                 </Link>
               </MenubarRadioGroup>
@@ -210,7 +148,7 @@ export default function EditorToolBar() {
       </div>
 
       {/* Run Button */}
-      {router.pathname == "/react-editor" ? (
+      {language == "reactjs" ? (
         <Button
           variant="secondary"
           className="bg-green-700 text-white font-bold text-[1rem]"
