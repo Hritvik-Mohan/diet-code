@@ -10,28 +10,35 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { LANGUAGE_VERSIONS } from "../files/fileData";
+import { files } from "../files/fileData";
 import { useEditorContext } from "@/context/editorContext";
 import { executeCode } from "@/utils/api";
 import { SupportedLanguages, ExecuteCodeResponse } from "@/index";
-import Link from "next/link";
 import { RiJavascriptFill } from "react-icons/ri";
-import { IoLogoReact } from "react-icons/io5";
 import { BiLogoTypescript } from "react-icons/bi";
 import { AiOutlineJava } from "react-icons/ai";
 import { IoLogoPython } from "react-icons/io5";
 import { CiFileOn } from "react-icons/ci";
 import { FaReact } from "react-icons/fa";
-import { useRouter } from "next/router";
+import editorinstances from '../files/editorinstances.json'
+import { IoAddOutline } from "react-icons/io5";
+import { BsNintendoSwitch } from "react-icons/bs";
 
-const languages = Object.entries(LANGUAGE_VERSIONS);
 
 export default function EditorToolBar() {
   const [position, setPosition] = useState("bottom");
-  const { language, code, setLanguage, setOutput, setLoader, setIsDarkTheme, setRunReactOutput } =
-    useEditorContext();
+  const {
+    language,
+    code,
+    setLanguage,
+    setOutput,
+    setLoader,
+    setIsDarkTheme,
+    setRunReactOutput,
+    setCode,
+    setFiles
+  } = useEditorContext();
   const [icon, setIcon] = useState<React.ReactElement | null>(null);
-  const router = useRouter();
 
   const runCode = async () => {
     if (!code) return;
@@ -43,7 +50,6 @@ export default function EditorToolBar() {
       )) as ExecuteCodeResponse;
       setOutput(response.run.output);
       setLoader(false);
-      console.log(response);
     } catch (error) {
       setLoader(false);
       console.error("Error executing code:", error);
@@ -61,7 +67,7 @@ export default function EditorToolBar() {
       case "python":
         return <IoLogoPython size="2rem" color="green" />;
       case "reactjs":
-        return <FaReact size="2rem" color="pink"/>;
+        return <FaReact size="2rem" color="pink" />;
       default:
         return <CiFileOn size="2rem" color="white" />;
     }
@@ -71,36 +77,60 @@ export default function EditorToolBar() {
     const icon = languageIcon();
     setIcon(icon);
   }, [language]);
+  useEffect(() => {
+    setFiles(editorinstances); 
+  }, []);
+
+  const handleNewFile = (fileType: keyof typeof files, fileExtension: string) => {
+    const newFile = {
+      [fileType]: {
+        code: files[fileType],
+        extension: fileExtension,
+        language: fileType
+      },
+    };
+
+    setLanguage(fileType);
+    
+    setFiles((prevFiles: typeof files) => [...Object.values(prevFiles), newFile]);
+
+    setLanguage(fileType);
+    setCode(newFile[fileType].code);
+  };
 
   return (
     <div className="flex items-center justify-between gap-6 p-4 bg-gray-800 text-[1rem]">
       <div className="flex items-center gap-4">
-        <div>
-          {router.pathname == "/react-editor" ? (
-            <IoLogoReact size="2rem" color="pink" />
-          ) : (
-            <>{icon}</>
-          )}
-        </div>
+        <div>{icon}</div>
         <Menubar className="bg-gray-800 text-white border-none">
           <MenubarMenu>
-            <MenubarTrigger className="font-bold text-[1rem]">
-              File
+            <MenubarTrigger className="font-bold text-[1rem] flex items-center gap-[4px]">
+              <div>New Code File</div> <IoAddOutline size={24}/>
             </MenubarTrigger>
             <MenubarContent>
               <MenubarRadioGroup>
-                <Link href="/editor">
-                  <MenubarRadioItem value="vs-dark">
-                    New Code File
-                  </MenubarRadioItem>
-                </Link>
+                <MenubarRadioItem value="vs-dark" onClick={() => handleNewFile("javascript", "js")}>
+                  New JavaScript File
+                </MenubarRadioItem>
+                <MenubarRadioItem value="vs-dark" onClick={() => handleNewFile("typescript", "ts")}>
+                  New TypeScript File
+                </MenubarRadioItem>
+                <MenubarRadioItem value="vs-dark" onClick={() => handleNewFile("reactjs", "jsx")}>
+                  New React JS File
+                </MenubarRadioItem>
+                <MenubarRadioItem value="vs-dark" onClick={() => handleNewFile("python", "py")}>
+                  New Python File
+                </MenubarRadioItem>
+                <MenubarRadioItem value="vs-dark" onClick={() => handleNewFile("java", "java")}>
+                  New Java
+                </MenubarRadioItem>
               </MenubarRadioGroup>
             </MenubarContent>
           </MenubarMenu>
           {/* Theme Selector */}
           <MenubarMenu>
-            <MenubarTrigger className="font-bold text-[1rem]">
-              Switch Themes
+            <MenubarTrigger className="font-bold text-[1rem] flex items-center gap-[8px]">
+              <div>Switch Themes</div> <BsNintendoSwitch />
             </MenubarTrigger>
             <MenubarContent>
               <MenubarItem disabled>Appearance</MenubarItem>
@@ -122,7 +152,7 @@ export default function EditorToolBar() {
             </MenubarContent>
           </MenubarMenu>
           {/* Language Selector */}
-          <MenubarMenu>
+          {/* <MenubarMenu>
             <MenubarTrigger className="font-bold text-[1rem]">
               Select Programming Languages
             </MenubarTrigger>
@@ -143,7 +173,7 @@ export default function EditorToolBar() {
                 ))}
               </MenubarRadioGroup>
             </MenubarContent>
-          </MenubarMenu>
+          </MenubarMenu> */}
         </Menubar>
       </div>
 
@@ -165,17 +195,6 @@ export default function EditorToolBar() {
           Run
         </Button>
       )}
-      {/* <iframe
-        ref={iframeRef}
-        title="Code Output"
-        sandbox="allow-scripts allow-same-origin"
-        style={{
-          width: "100%",
-          height: "400px",
-          border: "1px solid #ccc",
-          marginTop: "10px",
-        }}
-      /> */}
     </div>
   );
 }

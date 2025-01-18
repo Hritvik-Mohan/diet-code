@@ -21,6 +21,8 @@ export interface EditorContextProps {
     setIsDarkTheme: (isDarkTheme: boolean) => void;
     runReactOutput: boolean;
     setRunReactOutput: (runReactOutput: boolean) => void;
+    files: Array, 
+    setFiles: (files: Array) => void;
 }
 
 export type UseEditorContextReturnType = EditorContextProps;
@@ -52,5 +54,13 @@ export interface MonacoEditorProps {
     onMount: (editor: EditorContextProps.IStandaloneCodeEditor) => void;
     options: MonacoEditorOptions;
 }
+
+export interface FileObject {
+    [key: string]: {
+      code: string;
+      extension: string;
+      language: string;
+    };
+  }
 
 export type EditorRef = React.MutableRefObject<editor.IStandaloneCodeEditor | null>;

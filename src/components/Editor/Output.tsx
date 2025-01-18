@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useEditorContext } from "@/context/editorContext";
 import { Progress } from "@/components/ui/progress";
+import { LuLogs } from "react-icons/lu";
+
 
 export default function Output() {
   const { output, loader } = useEditorContext();
@@ -26,7 +28,7 @@ export default function Output() {
   return (
     <div className="p-4 bg-[rgba(30,30,30)] text-white h-full">
       <div>
-        <h1 className="text-xl font-bold pb-4">Output</h1>
+        <h1 className="text-xl font-bold pb-4 flex items-center gap-[1rem]">Output <LuLogs /></h1>
       </div>
       {loader ? (
         <div>

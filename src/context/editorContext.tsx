@@ -14,6 +14,7 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isReactProject, setIsReactProject] = React.useState(true);
   const [isDarkTheme, setIsDarkTheme] = React.useState(true); 
   const [runReactOutput, setRunReactOutput] = React.useState(false);
+  const [files, setFiles] = React.useState([]);
 
   return (
     <EditorContext.Provider
@@ -33,7 +34,9 @@ export const EditorProvider: React.FC<{ children: React.ReactNode }> = ({
         isDarkTheme, 
         setIsDarkTheme,
         runReactOutput, 
-        setRunReactOutput
+        setRunReactOutput,
+        files, 
+        setFiles
       }}
     >
       {children}

@@ -1,0 +1,9 @@
+[
+        {
+            "javascript": {
+                "code": "// Sample code example\nconsole.log('Hello, world!');",
+                "extension": "js",
+                "language": "javascript"
+            }
+        }
+]
