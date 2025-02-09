@@ -5,7 +5,6 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 export default function Home() {
   return (
     <div className="flex flex-col items-center bg-gray-800 h-[100vh] justify-center">
-      <h1 className="font-bold text-white mb-4"><img src="/codemonklogo.png" alt="code monk logo"/> <div className="text-[1.5rem]">Assignment</div></h1>
       <h2 className="text-[1.5rem] mb-6 text-gray-300 text-center">
         Click the button below to open the <code className="text-blue-400">code editor</code>:
       </h2>
